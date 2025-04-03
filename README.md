@@ -1,97 +1,71 @@
 # README - Descifrado Afín con Interfaz Gráfica
-📌 Descripción del Proyecto
+
+## 📌 Descripción del Proyecto
+
 Este repositorio contiene una herramienta gráfica en Python para descifrar mensajes cifrados con el método Afín. El programa fue diseñado específicamente para resolver un mensaje capturado en una transmisión, que se presume fue cifrado usando este método.
 
-🔍 Contexto del Problema
-Se interceptó el siguiente mensaje cifrado:
+## 🔍 Contexto del Problema
+Mensaje cifrado interceptado:
 
-Copy
-AEUAMXSIJIRIVBMRIVJMJIZBYUYDYUJIBYTVYUYBMAIZTIBMXIVUYZMWSIFMAEVMJYFMKEMJIZTVYJIUE
-El objetivo era descifrar este mensaje encontrando las claves correctas de decimación (a) y desplazamiento (b) del cifrado Afín.
+`AEUAMXSIJIRIVBMRIVJMJIZBYUYDYUJIBYTVYUYBMAIZTIBMXIVUYZMWSIFMAEVMJYFMKEMJIZTVYJIUE`
 
-🔐 Método Afín Explicado
-El cifrado Afín es un tipo de cifrado por sustitución que combina:
+Para esto se aplicó el método de desciframiento/ciframiento Afín.
 
-Un cifrado multiplicativo (decimación)
+## 🔐 Método Afín Explicado
 
-Un cifrado aditivo (desplazamiento)
+**Definición:**  
+El cifrado afín es un algoritmo de sustitución monoalfabética que combina:
+1. **Cifrado multiplicativo** (decimación)
+2. **Cifrado aditivo** (desplazamiento)
 
-Fórmula de Cifrado:
-Copy
-C = (a·P + b) mod 26
-Donde:
+**Fórmulas:**  
+- ▶️ **Cifrado:** `C = (a·P + b) mod 26`  
+- ◀️ **Descifrado:** `P = a⁻¹·(C - b) mod 26`  
 
-P: Letra del texto plano (como número 0-25)
+**Claves:**  
+- `a`: Entero coprimo con 26 (mcd(a,26)=1)  
+  *Valores válidos:* 1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25  
+- `b`: Desplazamiento (0 ≤ b ≤ 25)  
 
-a: Clave de decimación (debe ser coprimo con 26)
+**Características:**  
+✓ Vulnerable a ataques de frecuencia  
+✓ Usa aritmética modular  
+✓ Requiere calcular el **inverso modular** (a⁻¹) para descifrar  
+✓ Solo 12 valores posibles para `a` (limitando claves a 12×26=312 combinaciones)  
 
-b: Clave de desplazamiento
+## 🛠️ Solución Implementada
+- **Claves encontradas:** a = 25, b = 12
+- **Inverso modular:** a⁻¹ = 25
 
-C: Letra cifrada resultante
+**Proceso:**
+1. Calcula inverso modular: `pow(25, -1, 26) = 25`
+2. Para cada letra: `P = (25 * (C - 12)) mod 26`
 
-Fórmula de Descifrado:
-Copy
-P = a⁻¹·(C - b) mod 26
-Donde a⁻¹ es el inverso modular de a módulo 26.
+**Resultados:**
+- Descifrado inicial: `MISMAPUEDEVERLAVERDADENLOSOJOSDELOTROSOLAMENTELAPERSONAQUEHAMIRADOHACIADENTRODESI`
+- Reorganizado: `SOLAMENTELAPERSONAQUEHAMIRADOHACIADENTRODESIMISMAPUEDEVERLAVERDADENLOSOJOSDELOTRO`
+- Texto legible y coherente `SOLAMENTE LA PERSONA QUE HA MIRADO HACIA DENTRO DE SI MISMA PUEDE VER LA VERDAD EN LOS OJOS DEL OTRO`
 
-Valores válidos para a:
-Debe ser coprimo con 26 (mcd(a,26)=1). Los valores posibles son:
-{1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25}
+## 💻 Uso del Programa
+Interfaz gráfica permite:
+1. Ingresar claves a y b (Si no se selecciona un valor para a y b válidos no hará nada `ERROR!!`)
+2. Ingresar mensaje cifrado (Por predeterminado está ingresado el mensaje cifrado)
+3. Mostrar resultados y fórmulas
 
-🛠️ Solución Implementada
-El programa encuentra que las claves correctas son:
+## 📝 Notas Adicionales
+- Alfabeto inglés (26 letras)
+- Función `reordenar_frase` contiene resultado esperado
+- Inverso modular calculado con `pow(a, -1, 26)`
 
-a = 25 (decimación)
+## 📚 Referencias
 
-b = 12 (desplazamiento)
+- Criptografía clásica: cifrados por sustitución
+- Aritmética modular para criptografía
+- Cifrado Afín y sus propiedades matemáticas
 
-Proceso de Descifrado:
-Calcula el inverso modular de a: a⁻¹ = pow(25, -1, 26) = 25
+## ✨ Frase Final
+> "Solamente la persona que ha mirado hacia dentro de sí misma puede ver la verdad en los ojos del otro"
 
-Para cada letra cifrada C:
+## 📋 Cómo usar este repositorio
 
-Convierte a número (A=0, B=1, ..., Z=25)
-
-Aplica: P = (25 * (C - 12)) mod 26
-
-Convierte el resultado de vuelta a letra
-
-Mensaje Descifrado Inicial:
-Copy
-SOLAMENTELAPERSONAQUEHAMIRADOHACIADENTRODESIMISMAPUEDEVERLAVERDADENLOSOJOSDELOTRO
-Mensaje Reorganizado (transposición manual):
-Copy
-SOLAMENTE LA PERSONA QUE HA MIRADO HACIA DENTRO DE SI MISMA PUEDE VER LA VERDAD EN LOS OJOS DEL OTRO
-💻 Uso del Programa
-La interfaz gráfica permite:
-
-Ingresar las claves a y b (valores predeterminados: 25 y 12)
-
-Ingresar el mensaje cifrado (predeterminado con el mensaje del problema)
-
-Mostrar:
-
-El mensaje descifrado
-
-El mensaje reorganizado
-
-Las fórmulas matemáticas aplicadas
-
-📝 Notas Adicionales
-La función reordenar_frase contiene el resultado esperado, ya que el descifrado correcto se conocía de antemano.
-
-El alfabeto usado es el inglés (26 letras, sin ñ).
-
-El inverso modular se calcula eficientemente con pow(a, -1, 26).
-
-📚 Referencias
-Criptografía clásica: cifrados por sustitución
-
-Aritmética modular para criptografía
-
-Cifrado Afín y sus propiedades matemáticas
-
-✨ Frase Final Descifrada
-"Solamente la persona que ha mirado hacia dentro de sí misma puede ver la verdad en los ojos del otro"
-
-Esta herramienta demuestra cómo combinar conceptos matemáticos con programación para resolver problemas de criptografía clásica.
+Simplemente clonar o descargar el repositorio y ejecutar el archivo afin4_1.py. Del resto probar y disfrutar :) 
